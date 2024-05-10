@@ -167,6 +167,33 @@ pub fn input<P: AsRef<Path> + ?Sized>(path: &P) -> Result<context::Input, Error>
     }
 }
 
+pub fn input_with_decoder<P: AsRef<Path> + ?Sized>(
+    path: &P,
+    decoder: &str,
+) -> Result<context::Input, Error> {
+    unsafe {
+        let mut ps = avformat_alloc_context();
+        let decoder = avcodec_find_decoder_by_name(decoder.as_ptr() as *const i8) as *mut AVCodec;
+
+        (*ps).video_codec = decoder;
+        (*ps).video_codec_id = (*decoder).id;
+
+        let path = from_path(path);
+
+        match avformat_open_input(&mut ps, path.as_ptr(), ptr::null_mut(), ptr::null_mut()) {
+            0 => match avformat_find_stream_info(ps, ptr::null_mut()) {
+                r if r >= 0 => Ok(context::Input::wrap(ps)),
+                e => {
+                    avformat_close_input(&mut ps);
+                    Err(Error::from(e))
+                }
+            },
+
+            e => Err(Error::from(e)),
+        }
+    }
+}
+
 pub fn input_with_dictionary<P: AsRef<Path> + ?Sized>(
     path: &P,
     options: Dictionary,
