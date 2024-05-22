@@ -167,20 +167,34 @@ pub fn input<P: AsRef<Path> + ?Sized>(path: &P) -> Result<context::Input, Error>
     }
 }
 
-pub fn input_with_decoder<P: AsRef<Path> + ?Sized>(
-    path: &P,
-    decoder: &str,
+pub fn input_with_decoder_format(
+    input_spec: &str,
+    decoder: Option<&str>,
+    format: Option<&str>,
 ) -> Result<context::Input, Error> {
     unsafe {
         let mut ps = avformat_alloc_context();
-        let decoder = avcodec_find_decoder_by_name(decoder.as_ptr() as *const i8) as *mut AVCodec;
+        if let Some(decoder) = decoder {
+            let decoder = CString::new(decoder).unwrap();
+            let decoder = avcodec_find_decoder_by_name(decoder.as_ptr()) as *mut AVCodec;
+            if decoder as *const _ == ptr::null() {
+                return Err(Error::DecoderNotFound);
+            }
 
-        (*ps).video_codec = decoder;
-        (*ps).video_codec_id = (*decoder).id;
+            (*ps).video_codec = decoder;
+            (*ps).video_codec_id = (*decoder).id;
+        }
 
-        let path = from_path(path);
+        let input_format = if let Some(format) = format {
+            let format = CString::new(format).unwrap();
+            av_find_input_format(format.as_ptr())
+        } else {
+            ptr::null_mut()
+        };
 
-        match avformat_open_input(&mut ps, path.as_ptr(), ptr::null_mut(), ptr::null_mut()) {
+        let path = CString::new(input_spec).unwrap();
+
+        match avformat_open_input(&mut ps, path.as_ptr(), input_format, ptr::null_mut()) {
             0 => match avformat_find_stream_info(ps, ptr::null_mut()) {
                 r if r >= 0 => Ok(context::Input::wrap(ps)),
                 e => {
