@@ -191,7 +191,14 @@ impl<'a> Parser<'a> {
             if self.inputs.is_null() {
                 self.inputs = input;
             } else {
-                (*self.inputs).next = input;
+                let mut curr = self.inputs;
+                loop {
+                    if (*curr).next.is_null() {
+                        break;
+                    }
+                    curr = (*curr).next;
+                }
+                (*curr).next = input;
             }
         }
 
@@ -217,7 +224,14 @@ impl<'a> Parser<'a> {
             if self.outputs.is_null() {
                 self.outputs = output;
             } else {
-                (*self.outputs).next = output;
+                let mut curr = self.outputs;
+                loop {
+                    if (*curr).next.is_null() {
+                        break;
+                    }
+                    curr = (*curr).next;
+                }
+                (*curr).next = output;
             }
         }
 
