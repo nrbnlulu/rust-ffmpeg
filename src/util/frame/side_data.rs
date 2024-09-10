@@ -132,6 +132,7 @@ impl From<AVFrameSideDataType> for Type {
 
             #[cfg(feature = "ffmpeg_6_1")]
             AV_FRAME_DATA_VIDEO_HINT => Type::VIDEO_HINT,
+            _ => unreachable!(),
         }
     }
 }
