@@ -69,7 +69,6 @@ pub enum Type {
     LCEVC,
     #[cfg(feature = "ffmpeg_7_1")]
     VIEW_ID,
-
     #[cfg(feature = "ffmpeg_7_1")]
     DOVI_RPU_BUFFER_T35,
 }
@@ -145,9 +144,9 @@ impl From<AVFrameSideDataType> for Type {
             AV_FRAME_DATA_LCEVC => Type::LCEVC,
             #[cfg(feature = "ffmpeg_7_1")]
             AV_FRAME_DATA_VIEW_ID => Type::VIEW_ID,
-
             #[cfg(feature = "ffmpeg_7_1")]
             AV_FRAME_DATA_DOVI_RPU_BUFFER_T35 => Type::DOVI_RPU_BUFFER_T35,
+            _ => unimplemented!(),
         }
     }
 }
@@ -214,9 +213,8 @@ impl From<Type> for AVFrameSideDataType {
             Type::LCEVC => AV_FRAME_DATA_LCEVC,
             #[cfg(feature = "ffmpeg_7_1")]
             Type::VIEW_ID => AV_FRAME_DATA_VIEW_ID,
-
             #[cfg(feature = "ffmpeg_7_1")]
-            Type::DOVI_RPU_BUFFER_T35 => AV_FRAME_DATA_DOVI_RPU_BUFFER,
+            Type::DOVI_RPU_BUFFER_T35 => AV_FRAME_DATA_DOVI_RPU_BUFFER_T35,
         }
     }
 }
