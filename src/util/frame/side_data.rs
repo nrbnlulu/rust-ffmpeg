@@ -216,7 +216,7 @@ impl From<Type> for AVFrameSideDataType {
             Type::VIEW_ID => AV_FRAME_DATA_VIEW_ID,
 
             #[cfg(feature = "ffmpeg_7_1")]
-            Type::DOVI_RPU_BUFFER_T35 => AV_FRAME_DATA_DOVI_RPU_BUFFER_T35,
+            Type::DOVI_RPU_BUFFER_T35 => AV_FRAME_DATA_DOVI_RPU_BUFFER,
         }
     }
 }
