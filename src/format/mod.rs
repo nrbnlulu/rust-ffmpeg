@@ -18,6 +18,7 @@ pub use self::format::{Input, Output};
 pub mod network;
 
 use std::ffi::{CStr, CString};
+use std::iter::FromIterator;
 use std::path::Path;
 use std::ptr;
 use std::str::from_utf8_unchecked;
@@ -171,6 +172,7 @@ pub fn input_with_decoder_format(
     input_spec: &str,
     decoder: Option<&str>,
     format: Option<&str>,
+    opts: Option<&[(String, String)]>,
 ) -> Result<context::Input, Error> {
     unsafe {
         let mut ps = avformat_alloc_context();
@@ -194,7 +196,18 @@ pub fn input_with_decoder_format(
 
         let path = CString::new(input_spec).unwrap();
 
-        match avformat_open_input(&mut ps, path.as_ptr(), input_format, ptr::null_mut()) {
+        let mut opts = if let Some(s) = opts {
+            Dictionary::from_iter(s).disown()
+        } else {
+            ptr::null_mut()
+        };
+
+        let res = avformat_open_input(&mut ps, path.as_ptr(), input_format, &mut opts);
+        if opts != ptr::null_mut() {
+            Dictionary::own(opts);
+        }
+
+        match res {
             0 => match avformat_find_stream_info(ps, ptr::null_mut()) {
                 r if r >= 0 => Ok(context::Input::wrap(ps)),
                 e => {
