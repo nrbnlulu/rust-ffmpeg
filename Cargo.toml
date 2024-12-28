@@ -115,5 +115,5 @@ optional = true
 
 [dependencies.ffmpeg-sys-next]
 version = "7.1.1"
-git = "https://github.com/hanekoo/rust-ffmpeg.git"
+git = "https://github.com/hanekoo/rust-ffmpeg-sys.git"
 default-features = false
