@@ -200,7 +200,7 @@ impl Audio {
         unsafe {
             slice::from_raw_parts(
                 (*self.as_ptr()).data[index],
-                (*self.as_ptr()).linesize[index] as usize,
+                (*self.as_ptr()).linesize[0] as usize,
             )
         }
     }
@@ -214,7 +214,7 @@ impl Audio {
         unsafe {
             slice::from_raw_parts_mut(
                 (*self.as_mut_ptr()).data[index],
-                (*self.as_ptr()).linesize[index] as usize,
+                (*self.as_ptr()).linesize[0] as usize,
             )
         }
     }
