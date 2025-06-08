@@ -99,7 +99,6 @@ fn init_filter() {
 #[cfg(not(feature = "filter"))]
 fn init_filter() {}
 
-
 pub fn init() -> Result<(), Error> {
     init_error();
     #[cfg(not(feature = "ffmpeg_5_0"))]
