@@ -8,7 +8,6 @@ jobs:
   build-test-lint-linux:
     name: Linux - FFmpeg ${{ matrix.ffmpeg_version }} - build, test and lint
     runs-on: ubuntu-latest
-    container: jrottenberg/ffmpeg:${{ matrix.ffmpeg_version }}-ubuntu
     strategy:
       matrix:
         ffmpeg_version: ["7.0", "7.1"]
@@ -17,13 +16,17 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          apt update
-          apt install -y --no-install-recommends clang curl pkg-config
+          sudo apt update
+          sudo apt install -y --no-install-recommends clang curl pkg-config xz-utils
+          curl -L https://sourceforge.net/projects/avbuild/files/linux/ffmpeg-${{ matrix.ffmpeg_version }}-linux-clang-default.tar.xz/download -o ffmpeg.tar.xz
+          tar -xf ffmpeg.tar.xz
+          export FFMPEG_DIR="${PWD}/ffmpeg-${{ matrix.ffmpeg_version }}-linux-clang-default"
+          echo "FFMPEG_DIR=${FFMPEG_DIR}" >> $GITHUB_ENV
+          echo "${FFMPEG_DIR}/bin" >> $GITHUB_PATH
       - name: Set up Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          override: true
           components: rustfmt, clippy
       - name: Build
         run: |
