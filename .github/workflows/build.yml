@@ -20,12 +20,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y --no-install-recommends clang curl pkg-config xz-utils
-          curl -L https://sourceforge.net/projects/avbuild/files/linux/ffmpeg-${{ matrix.ffmpeg_version }}-linux-clang-default.tar.xz/download -o ffmpeg.tar.xz
-          tar -xf ffmpeg.tar.xz
-          export FFMPEG_DIR="${PWD}/ffmpeg-${{ matrix.ffmpeg_version }}-linux-clang-default"
-          echo "FFMPEG_DIR=${FFMPEG_DIR}" >> $GITHUB_ENV
-          echo "${FFMPEG_DIR}/bin" >> $GITHUB_PATH
+          sudo apt install -y --no-install-recommends clang curl pkg-config xz-utils ffmpeg
+          sudo apt install -y ffmpeg-{{ matrix.ffmpeg_version }}*
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
