@@ -72,9 +72,9 @@ jobs:
       matrix:
         include:
           - ffmpeg_version: latest
-            ffmpeg_download_url: ffmpeg-release-full-shared.7z
+            ffmpeg_download_url: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
           - ffmpeg_version: 7.0.2
-            ffmpeg_download_url: ffmpeg-7.0.2-full_build-shared.7z
+            ffmpeg_download_url: https://www.gyan.dev/ffmpeg/builds/ffmpeg-7.0.2-full_build-shared.7z
       fail-fast: false
     env:
       FFMPEG_DOWNLOAD_URL: ${{ matrix.ffmpeg_download_url }}
