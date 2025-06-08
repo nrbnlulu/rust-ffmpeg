@@ -87,7 +87,8 @@ jobs:
         run: |
           $VCINSTALLDIR = $(& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath)
           Add-Content $env:GITHUB_ENV "LIBCLANG_PATH=${VCINSTALLDIR}\VC\Tools\LLVM\x64\bin`n"
-          Invoke-WebRequest "${env:FFMPEG_DOWNLOAD_URL}" -OutFile ffmpeg-release-full-shared.7z
+          curl -L --fail "${env:FFMPEG_DOWNLOAD_URL}" -o ffmpeg-release-full-shared.7z
+          if (!(Test-Path ffmpeg-release-full-shared.7z)) { Write-Error "FFmpeg download failed"; exit 1 }
           7z x ffmpeg-release-full-shared.7z
           mkdir ffmpeg
           mv ffmpeg-*/* ffmpeg/
