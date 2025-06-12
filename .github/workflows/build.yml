@@ -17,11 +17,14 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y --no-install-recommends clang curl pkg-config xz-utils ffmpeg
-          sudo apt install -y ffmpeg-{{ matrix.ffmpeg_version }}*
+      - uses: FedericoCarboni/setup-ffmpeg@v3
+        id: setup-ffmpeg
+        with:
+          ffmpeg-version: ${{ matrix.ffmpeg_version }}
+          architecture: ''
+          linking-type: 'shared'
+
+
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
