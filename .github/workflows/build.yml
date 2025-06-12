@@ -24,6 +24,10 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "10.0"
       - name: Install ffmpeg
         id: setup-ffmpeg
         run: |
