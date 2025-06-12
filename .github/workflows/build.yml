@@ -21,7 +21,6 @@ jobs:
         id: setup-ffmpeg      
         with:
           ffmpeg-version: ${{ matrix.ffmpeg_version }}
-          linking-type: shared
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
