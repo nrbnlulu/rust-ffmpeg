@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install ffmpeg
         id: setup-ffmpeg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           FFMPEG_VERSION="${{ matrix.ffmpeg_version }}"
           if [ "$FFMPEG_VERSION" = "release" ]; then
@@ -36,7 +38,7 @@ jobs:
           mkdir ffmpeg
           tar -xf ffmpeg.tar.xz -C ffmpeg --strip-components=1
           echo "ffmpeg-path=$(pwd)/ffmpeg" >> $GITHUB_OUTPUT
-          
+
       - name: check that pkg-config can find ffmpeg
         run: |
           export PKG_CONFIG_PATH="${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig"
