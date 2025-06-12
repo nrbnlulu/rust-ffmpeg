@@ -1,5 +1,5 @@
 [package]
-name = "rust-ffmpeg"
+name = "rffmpeg"
 version = "7.1.0"
 build = "build.rs"
 
@@ -7,9 +7,9 @@ authors = ["meh. <meh@schizofreni.co>", "Zhiming Wang <i@zhimingwang.org>"]
 license = "WTFPL"
 
 description = "Safe FFmpeg wrapper (FFmpeg 4 compatible fork of the ffmpeg crate)"
-documentation = "https://docs.rs/rust-ffmpeg"
-homepage = "https://github.com/nrbnlulu/rust-ffmpeg#readme"
-repository = "https://github.com/nrbnlulu/rust-ffmpeg"
+documentation = "https://docs.rs/rffmpeg"
+homepage = "https://github.com/nrbnlulu/rffmpeg#readme"
+repository = "https://github.com/nrbnlulu/rffmpeg"
 readme = "README.md"
 keywords = ["ffmpeg", "multimedia", "video", "audio"]
 categories = ["multimedia"]

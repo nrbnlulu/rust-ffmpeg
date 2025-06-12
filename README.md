@@ -1,16 +1,16 @@
-# rust-ffmpeg
+# rffmpeg
 
-[![crates.io](https://img.shields.io/crates/v/rust-ffmpeg)](https://crates.io/crates/rust-ffmpeg)
-[![docs.rs](https://docs.rs/rust-ffmpeg/badge.svg)](https://docs.rs/rust-ffmpeg)
-[![build](https://github.com/nrbnlulu/rust-ffmpeg/workflows/build/badge.svg)](https://github.com/nrbnlulu/rust-ffmpeg/actions)
+[![crates.io](https://img.shields.io/crates/v/rffmpeg)](https://crates.io/crates/rffmpeg)
+[![docs.rs](https://docs.rs/rffmpeg/badge.svg)](https://docs.rs/rffmpeg)
+[![build](https://github.com/nrbnlulu/rffmpeg/workflows/build/badge.svg)](https://github.com/nrbnlulu/rffmpeg/actions)
 
 currently supports ffmpeg 6.1 - 7.1
 
-Build instructions can be found on the [wiki](https://github.com/nrbnlulu/rust-ffmpeg/wiki/Notes-on-building).
+Build instructions can be found on the [wiki](https://github.com/nrbnlulu/rffmpeg/wiki/Notes-on-building).
 
 Documentation:
 
-- [docs.rs](https://docs.rs/rust-ffmpeg/);
+- [docs.rs](https://docs.rs/rffmpeg/);
 - [FFmpeg user manual](https://ffmpeg.org/ffmpeg-all.html);
 - [FFmpeg Doxygen](https://ffmpeg.org/doxygen/trunk/).
 
