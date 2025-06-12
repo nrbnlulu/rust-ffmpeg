@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ffmpeg_version: ["6.0.1", "7.0.2"]
+        ffmpeg_version: ["6.0.1", "release"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +30,7 @@ jobs:
           echo "PKG_CONFIG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig" >> $GITHUB_ENV
       - name: check that pkg-config can find ffmpeg
         run: |
+          export PKG_CONFIG_PATH="${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig"
           pkg-config --cflags --libs libavformat libavcodec libavutil libswscale || exit 1
           echo "pkg-config found ffmpeg libraries successfully"
       - name: Set up Rust
