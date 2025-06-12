@@ -28,8 +28,14 @@ jobs:
           toolchain: stable
           components: rustfmt, clippy
       - name: Build
-
+        env:
+          FFMPEG_VERSION: ${{ matrix.ffmpeg_version }}
+          FFMPEG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}
+          FFMPEG_INCLUDE_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/include
+          FFMPEG_LIB_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib
         run: |
+          echo "${{ matrix.ffmpeg_version }}" 
+          echo "FFMPEG PATH ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}"
           cargo build --examples
       - name: Test
         run: |
