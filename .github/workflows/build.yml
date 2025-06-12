@@ -24,6 +24,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends clang pkg-config
 
       - name: Install ffmpeg
         id: setup-ffmpeg
