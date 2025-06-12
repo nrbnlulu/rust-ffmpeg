@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ffmpeg_version: ["6.0.1", "release"]
+        ffmpeg_version: ["6.1", "release"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
