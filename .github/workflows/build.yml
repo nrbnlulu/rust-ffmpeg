@@ -14,12 +14,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - ffmpeg_version: latest
-            asset_url: "ffmpeg-master-latest-linux64-gpl.tar.xz"
-          - ffmpeg_version: 7.1
-            asset_url: "ffmpeg-n7.1-latest-linux64-gpl-7.1.tar.xz"
-          - master:
-            asset_url: "ffmpeg-master-latest-linux64-gpl.tar.xz"
+          - ffmpeg_version: 6.1.2
+            asset_url: "ffmpeg-n6.1.2-31-gf120f66838-linux64-gpl-6.1.tar.xz"
+          - ffmpeg_version: 7.1.1
+            asset_url: "ffmpeg-n7.1.1-20-g9373b442a6-linux64-gpl-7.1.tar.xz"
 
       fail-fast: false
     steps:
@@ -27,7 +25,7 @@ jobs:
       - name: Install ffmpeg
         id: setup-ffmpeg
         run: |
-          BASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/latest"
+          BASE_URL="https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2025-06-06-13-47"
           echo "Downloading FFmpeg version: ${{ matrix.ffmpeg_version }}"
           echo "Downloading asset: ${{ matrix.asset_url }}"
           curl -L --fail "${BASE_URL}/${{ matrix.asset_url }}" -o ffmpeg.tar.xz
@@ -41,6 +39,7 @@ jobs:
           echo "ffmpeg-path=$(pwd)/ffmpeg" >> $GITHUB_OUTPUT
           echo "FFmpeg directory structure:"
           find ffmpeg | sort
+          echo "PKG_CONFIG_PATH=$(pwd)/ffmpeg/lib/pkgconfig" >> $GITHUB_ENV
 
       - name: check that pkg-config can find ffmpeg
         run: |
