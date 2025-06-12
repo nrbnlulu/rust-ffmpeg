@@ -19,7 +19,7 @@ jobs:
           - ffmpeg_version: 7.1
             asset_url: "ffmpeg-n7.1-latest-linux64-gpl-shared-7.1.tar.xz"
           - ffmpeg_version: 6.1
-            asset_url: "ffmpeg-n6.1.2-31-gf120f66838-linux64-gpl-shared-6.1.tar.xz"
+            asset_url: "ffmpeg-n6.1-latest-linux64-gpl-shared-6.1.tar.xz"
 
       fail-fast: false
     steps:
