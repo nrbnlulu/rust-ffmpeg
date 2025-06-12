@@ -17,17 +17,26 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: FedericoCarboni/setup-ffmpeg@v3.1
+      - name: Install ffmpeg
         id: setup-ffmpeg
-        with:
-          ffmpeg-version: ${{ matrix.ffmpeg_version }}
-      - name: Add FFmpeg to PATH
         run: |
-          echo "${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}" >> $GITHUB_PATH
-          echo "FFMPEG_LIB_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/lib" >> $GITHUB_ENV
-          echo "FFMPEG_INCLUDE_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/include" >> $GITHUB_ENV
-          echo "FFMPEG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}" >> $GITHUB_ENV
-          echo "PKG_CONFIG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig" >> $GITHUB_ENV
+          FFMPEG_VERSION="${{ matrix.ffmpeg_version }}"
+          if [ "$FFMPEG_VERSION" = "release" ]; then
+            FFMPEG_VERSION=$(gh release list -R BtbN/FFmpeg-Builds --limit 1 --json tagName -q '.[0].tagName' | sed 's/^n//')
+          fi
+
+          ASSET_URL=$(gh release view "n${FFMPEG_VERSION}" -R BtbN/FFmpeg-Builds --json assets -q '.assets[] | select(.name | test("ffmpeg-n'"${FFMPEG_VERSION}"'-linux64-gpl-shared.tar.xz")) | .url')
+
+          if [ -z "$ASSET_URL" ]; then
+            echo "Could not find FFmpeg release for version $FFMPEG_VERSION"
+            exit 1
+          fi
+
+          gh api "$ASSET_URL" > ffmpeg.tar.xz
+          mkdir ffmpeg
+          tar -xf ffmpeg.tar.xz -C ffmpeg --strip-components=1
+          echo "ffmpeg-path=$(pwd)/ffmpeg" >> $GITHUB_OUTPUT
+          
       - name: check that pkg-config can find ffmpeg
         run: |
           export PKG_CONFIG_PATH="${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig"
