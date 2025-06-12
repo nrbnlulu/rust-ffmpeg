@@ -38,7 +38,8 @@ jobs:
           tar -xf ffmpeg.tar.xz -C ffmpeg --strip-components=1
           echo "ffmpeg-path=$(pwd)/ffmpeg" >> $GITHUB_OUTPUT
           echo "FFmpeg directory structure:"
-          find ffmpeg | sort
+          sudo apt install tree
+          tree ffmpeg
           echo "PKG_CONFIG_PATH=$(pwd)/ffmpeg/lib/pkgconfig" >> $GITHUB_ENV
 
       - name: check that pkg-config can find ffmpeg
