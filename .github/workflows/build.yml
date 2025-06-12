@@ -21,6 +21,12 @@ jobs:
         id: setup-ffmpeg      
         with:
           ffmpeg-version: ${{ matrix.ffmpeg_version }}
+      - name: Add FFmpeg to PATH
+        run: |
+          echo "${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}" >> $GITHUB_PATH
+          echo "FFMPEG_LIB_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/lib" >> $GITHUB_ENV
+          echo "FFMPEG_INCLUDE_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/include" >> $GITHUB_ENV
+          echo "FFMPEG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}" >> $GITHUB_ENV
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -28,11 +34,6 @@ jobs:
           toolchain: stable
           components: rustfmt, clippy
       - name: Build
-        env:
-          FFMPEG_VERSION: ${{ matrix.ffmpeg_version }}
-          FFMPEG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}
-          FFMPEG_INCLUDE_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/include
-          FFMPEG_LIB_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib
         run: |
           echo "${{ matrix.ffmpeg_version }}" 
           echo "FFMPEG PATH ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}"
