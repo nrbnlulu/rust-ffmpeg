@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: FedericoCarboni/setup-ffmpeg@v3.1
-        id: setup-ffmpeg      
+        id: setup-ffmpeg
         with:
           ffmpeg-version: ${{ matrix.ffmpeg_version }}
       - name: Add FFmpeg to PATH
@@ -27,7 +27,9 @@ jobs:
           echo "FFMPEG_LIB_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/lib" >> $GITHUB_ENV
           echo "FFMPEG_INCLUDE_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/include" >> $GITHUB_ENV
           echo "FFMPEG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}" >> $GITHUB_ENV
-      - name: check that pck-config can find ffmpeg
+      - name: check that pkg-config can find ffmpeg
+        env:
+          PKG_CONFIG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig
         run: |
           pkg-config --cflags --libs libavformat libavcodec libavutil libswscale || exit 1
           echo "pkg-config found ffmpeg libraries successfully"
@@ -37,17 +39,25 @@ jobs:
           toolchain: stable
           components: rustfmt, clippy
       - name: Build
+        env:
+          PKG_CONFIG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig
         run: |
           echo "${{ matrix.ffmpeg_version }}" 
           echo "FFMPEG PATH ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}"
           cargo build --examples
       - name: Test
+        env:
+          PKG_CONFIG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig
         run: |
           cargo test --examples
       - name: Lint
+        env:
+          PKG_CONFIG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig
         run: |
           cargo clippy --examples -- -D warnings
       - name: Check format
+        env:
+          PKG_CONFIG_PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig
         run: |
           cargo fmt -- --check
 
