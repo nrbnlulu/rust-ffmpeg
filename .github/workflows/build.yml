@@ -24,10 +24,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "10.0"
+
       - name: Install ffmpeg
         id: setup-ffmpeg
         run: |
@@ -46,12 +43,13 @@ jobs:
           echo "FFmpeg directory structure:"
           find ffmpeg | sort
           echo "PKG_CONFIG_PATH=$(pwd)/ffmpeg/lib/pkgconfig" >> $GITHUB_ENV
+          echo "FFMPEG_DIR=$(pwd)/ffmpeg" >> $GITHUB_ENV
+          echo "FFMPEG_PATH=$(pwd)/ffmpeg/bin" >> $GITHUB_ENV
+          echo "FFMPEG_INCLUDE_DIR=$(pwd)/ffmpeg/include" >> $GITHUB_ENV
+          echo "FFMPEG_LIB_DIR=$(pwd)/ffmpeg/lib" >> $GITHUB_ENV
 
       - name: check that pkg-config can find ffmpeg
         run: |
-          export PKG_CONFIG_PATH="${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig"
-          echo "Listing contents of ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}:"
-          ls -l "${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}"
           pkg-config --cflags --libs libavformat libavcodec libavutil libswscale || exit 1
           echo "pkg-config found ffmpeg libraries successfully"
       - name: Set up Rust
