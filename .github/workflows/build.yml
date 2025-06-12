@@ -14,10 +14,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - ffmpeg_version: 6.1.2
-            asset_url: "ffmpeg-n6.1.2-31-gf120f66838-linux64-gpl-6.1.tar.xz"
-          - ffmpeg_version: 7.1.1
-            asset_url: "ffmpeg-n7.1.1-20-g9373b442a6-linux64-gpl-7.1.tar.xz"
+          - ffmpeg_version: latest
+            asset_url: "ffmpeg-master-latest-linux64-gpl-shared.tar.xz"
+          - ffmpeg_version: 7.1
+            asset_url: "ffmpeg-n7.1-latest-linux64-gpl-shared-7.1.tar.xz"
+          - 6.1:
+            asset_url: "ffmpeg-n6.1.2-31-gf120f66838-linux64-gpl-shared-6.1.tar.xz"
 
       fail-fast: false
     steps:
@@ -38,8 +40,7 @@ jobs:
           tar -xf ffmpeg.tar.xz -C ffmpeg --strip-components=1
           echo "ffmpeg-path=$(pwd)/ffmpeg" >> $GITHUB_OUTPUT
           echo "FFmpeg directory structure:"
-          sudo apt install tree
-          tree ffmpeg
+          find ffmpeg | sort
           echo "PKG_CONFIG_PATH=$(pwd)/ffmpeg/lib/pkgconfig" >> $GITHUB_ENV
 
       - name: check that pkg-config can find ffmpeg
