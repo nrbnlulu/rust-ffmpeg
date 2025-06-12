@@ -31,6 +31,8 @@ jobs:
       - name: check that pkg-config can find ffmpeg
         run: |
           export PKG_CONFIG_PATH="${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib/pkgconfig"
+          echo "Listing contents of ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}:"
+          ls -l "${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}"
           pkg-config --cflags --libs libavformat libavcodec libavutil libswscale || exit 1
           echo "pkg-config found ffmpeg libraries successfully"
       - name: Set up Rust
