@@ -27,7 +27,10 @@ jobs:
           echo "FFMPEG_LIB_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/lib" >> $GITHUB_ENV
           echo "FFMPEG_INCLUDE_DIR=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}/include" >> $GITHUB_ENV
           echo "FFMPEG_PATH=${{ steps.setup-ffmpeg.outputs.ffmpeg-path}}" >> $GITHUB_ENV
-
+      - name: check that pck-config can find ffmpeg
+        run: |
+          pkg-config --cflags --libs libavformat libavcodec libavutil libswscale || exit 1
+          echo "pkg-config found ffmpeg libraries successfully"
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
