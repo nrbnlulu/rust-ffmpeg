@@ -17,9 +17,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: FedericoCarboni/setup-ffmpeg@v3
+      - uses: FedericoCarboni/setup-ffmpeg@v3.1
+        id: setup-ffmpeg      
         with:
           ffmpeg-version: ${{ matrix.ffmpeg_version }}
+          linking-type: shared
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -27,6 +29,11 @@ jobs:
           toolchain: stable
           components: rustfmt, clippy
       - name: Build
+        env:
+          FFMPEG_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}
+          FFMPEG_INCLUDE_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/include
+          FFMPEG_LIB_DIR: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/lib
+          PATH: ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}/bin:${{ env.PATH }}
         run: |
           cargo build --examples
       - name: Test
